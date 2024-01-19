@@ -610,18 +610,20 @@
     }
     
     // Attach an event listener to the "Download HTML" button
-    document.querySelector('.download-btn').addEventListener('click', function() {
-        event.preventDefault();
-	const htmlContent = generateDownloadHTML();
-        const blob = new Blob([htmlContent], { type: 'text/html' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'nfp.html';
-        a.click();
-        URL.revokeObjectURL(url);
-
+    document.querySelector('.download-btn').addEventListener('click', function(event) {
+	    event.preventDefault(); // Prevent default action of the button
+	    const htmlContent = generateDownloadHTML();
+	    const blob = new Blob([htmlContent], { type: 'text/html' });
+	    const url = URL.createObjectURL(blob);
+	    const a = document.createElement('a');
+	    a.href = url;
+	    a.download = 'nfp.html';
+	    document.body.appendChild(a); // Append the element to the body
+	    a.click();
+	    URL.revokeObjectURL(url);
+	    a.remove(); // Remove the element after clicking
     });
+
 
     document.getElementById('regenerate-btn').addEventListener('click', function() {
         event.preventDefault();
