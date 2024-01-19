@@ -232,6 +232,20 @@
             width: 21px;
             height: 21px;
         }
+
+        .progress-container {
+            width: 100%;
+            background-color: #ddd;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 30px;
+            background-color: #4CAF50;
+            text-align: center;
+            line-height: 30px;
+            color: white;
+        }	    
         
         @media only screen and (max-width: 1006px) {
             .custom { float:none; }
@@ -249,7 +263,10 @@
 	<h1 data-text="NodeFrogPunkinals">NodeFrogPunkinals</h1>
 
 <p>Useless glitchy recursive 10k collection blending the 4 most popular ordinal collections: Node Monkes, Bitcoin Frogs, Bitcoin Punks and Goosinals. Free mint that is most likely going to zero. Inscribe the downloaded HTML. First 10k inscriptions will be added to the collection.</p>
-<a href="https://twitter.com/NFPunkinals" target="_blank" class="button follow"">@NFPunkinals on X</a>
+	<div class="progress-container">
+	    <div class="progress-bar" id="progressBar">0%</div>
+	</div>
+	<a href="https://twitter.com/NFPunkinals" target="_blank" class="button follow"">@NFPunkinals on X</a>
 </div>
 <div class="container">
     <div class="image">
@@ -703,6 +720,30 @@
             linkElement.title = title+number;
         }
     };
+	    
+	async function fetchDataAndUpdateProgressBar() {
+	    try {
+	        const response = await fetch('https://nfpunkinals.xyz/cron/count.json');
+	        const data = await response.json();
+	        
+	        const totalCount = 10000;
+	        const currentCount = parseInt(data.count, 10);
+	        const progressPercentage = (currentCount / totalCount) * 100;
+	
+	        updateProgressBar(progressPercentage);
+	    } catch (error) {
+	        console.error('Error fetching data:', error);
+	    }
+	}
+	
+	function updateProgressBar(percentage) {
+	    const progressBar = document.getElementById('progressBar');
+	    progressBar.style.width = percentage + '%';
+	    progressBar.textContent = percentage.toFixed(2) + '%';
+	}
+	
+	fetchDataAndUpdateProgressBar();
+	    
 </script>
 
 
