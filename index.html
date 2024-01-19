@@ -613,7 +613,11 @@
     document.getElementById('download-btn').addEventListener('click', function() {
         event.preventDefault();
         showSpinner('download-btn');
-        const htmlContent = generateDownloadHTML();
+	//delay to set display none
+	setTimeout(() => {
+            document.querySelector(".spinner").style.display = 'none';
+        }, 1000);
+	const htmlContent = generateDownloadHTML();
         const blob = new Blob([htmlContent], { type: 'text/html' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -621,8 +625,7 @@
         a.download = 'nfp.html';
         a.click();
         URL.revokeObjectURL(url);
-        
-	document.querySelector(".spinner").style.display = 'none';
+
     });
 
     document.getElementById('regenerate-btn').addEventListener('click', function() {
