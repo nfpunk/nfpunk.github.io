@@ -620,9 +620,7 @@
         a.click();
         URL.revokeObjectURL(url);
         
-        setTimeout(() => {
-            document.querySelector(".spinner").style.display = 'none';
-        }, 1000);
+	document.querySelector(".spinner").style.display = 'none';
     });
 
     document.getElementById('regenerate-btn').addEventListener('click', function() {
