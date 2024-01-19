@@ -599,7 +599,7 @@
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        //a.download = 'nfp.html';
+        a.download = 'nfp.html';
         a.click();
         URL.revokeObjectURL(url);
         
