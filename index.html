@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=600">
+    <title>NodeFrogPunkinals - Recursive Ordinals NFP Collection</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">    
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            padding-bottom:40px;
+            text-align: center;
+            font-family: 'DotGothic16';            
+            background: #1B1212;
+            letter-spacing: 1px;
+            color: #fff;
+        }
+
+        h1,h2,h3 {
+            letter-spacing: 3px;            
+        }
+
+        button, input, select, .button {
+            font-family: 'DotGothic16', sans-serif;
+            padding: 10px 20px;
+            margin: 5px 0;
+            border: 2px solid white;
+            background-color: #333;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+            letter-spacing: 2px;
+            font-size: 18px; 
+        }
+
+        button:hover, input[type="number"]:hover, select:hover, .button:hover {
+            background-color: #555;
+            color: #fff;
+        }
+
+        .button, button {
+            margin:20px;
+            display: inline-block;
+            padding: 15px;
+        }
+
+        input[type="number"], select {
+            width: auto;
+            padding: 5px;
+            margin-right: 10px;
+            background-color: #222;
+            color: white;
+            border-radius: 4px;
+            letter-spacing: 2px;
+            font-size: 16px;
+        }
+
+        input[type="number"]:focus, select:focus {
+            outline: none;
+            border-color: #777;
+        }        
+
+        .wrap {
+
+        }
+
+        .wrap img {
+            width: 80px;
+            height: 80px;
+            image-rendering: pixelated;
+            margin:10px;
+            background:#fff;
+        }
+        
+        .head {
+        	margin: 0 auto;
+        	width: 500px;
+        	margin-bottom:20px;
+        }
+	    .form-group {
+	        margin-bottom: 15px;
+	    }
+
+	    label {
+	        display: block;
+	        margin-bottom: 5px;
+	    }
+
+	    .number-input {
+	    	width:60px;
+	    }
+
+	    .number-input, .blend-mode-dropdown, .layer-order-dropdown {
+	        margin-right: 10px;
+	    }     
+	    
+	    
+	    img#resultImage {
+	        position:relative;
+	        width:500px;
+	        height:500px;
+	    }
+
+        /* animation */
+        @keyframes glitch {
+            0% {
+                transform: translate(0);
+                opacity: 1;
+            }
+            30% {
+                transform: translate(0);
+                opacity: 1;
+            }
+            50% {
+                transform: translate(-1px, 5px;);
+                opacity: 1;
+                width:101%;                
+            }        
+            75% {
+                transform: translate(-2px, 2px);
+                opacity: 0.6;
+                color: red;
+                background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
+            }
+            80% {
+                transform: translate(1.2px, -2px);
+                opacity: 0.8;
+                color: white;
+                background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%);
+            }
+            82% {
+                font-family: 'Impact';
+                font-weight: 300;
+                font-size: 34px;
+            }    
+            85% {
+                transform: translate(-1.1px, -2px);
+                opacity: 0.9;
+              background: -webkit-linear-gradient(#eee, #333);
+              -webkit-background-clip: text;
+              -webkit-text-fill-color: transparent;  
+              letter-spacing: 0;
+              font-size:38px;      
+            }
+            100% {
+                transform: translate(0.5px, 2px);
+                opacity: 0.8;        
+            }
+        }
+
+        h1, h2, h3 {
+            /* Existing styles */
+            position: relative;
+            color: #fff;
+        }
+
+        h1::before,
+        h1::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            color: #fff;
+            background-color: #1B1212;
+            overflow: hidden;
+        }
+
+        h1::before {
+            left: 2px;
+            text-shadow: 0.4px 0 red;
+            animation: glitch 1s linear infinite;
+        }
+
+        h1::after {
+            left: -0.5px;
+            text-shadow: 2px 0 blue;
+            animation: glitch 4s linear infinite;
+        }   
+        
+        h2 {
+            font-size:26px;
+        }
+        
+        h3 {
+            margin-bottom:0px;
+        }
+        
+        .loading {
+            padding:100px;
+            position:absolute;
+            z-index:-1;
+            width:300px;
+            height:300px;
+            text-align:center;
+        }
+        
+        .container {
+            position:relative;
+            margin: 0 auto;
+            text-align: center;
+            width: 1005px;
+            margin-top:30px;
+        }
+        
+        .custom {
+            width:470px;
+            padding:15px;
+            float:left;
+            border:1px solid white;
+        }
+        
+        .image {
+            width:500px;
+            float:left;
+            border:1px solid white;
+        }
+        
+        .spinner {
+            display: none;
+            background-image: url('loading.gif');
+            background-size: cover;
+            width: 21px;
+            height: 21px;
+        }
+        
+        @media only screen and (max-width: 1006px) {
+            .custom { float:none; }
+            .container { width:510px; }
+            input[type="number"], select {
+                padding: 3px;
+                margin-right: 3px;
+                width:70px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="head">
+	<h1 data-text="NodeFrogPunkinals">NodeFrogPunkinals</h1>
+
+<p>Useless glitchy recursive 10k collection blending the 4 most popular ordinal collections: Node Monkes, Bitcoin Frogs, Bitcoin Punks and Goosinals. Free mint that is most likely going to zero. Inscribe the downloaded HTML. First 10k inscriptions will be added to the collection.</p>
+
+</div>
+<div class="container">
+    <div class="image">
+
+        <div class="result">
+            <div class="loading">
+                <p>Loading random NFP...</p>
+                <img src="loading.gif" width="30" height="30">
+            </div>
+            <canvas id="resultCanvas" width="500" height="500"></canvas>
+        </div>
+        
+        <div class="wrap_container">
+            <p>Blended Recursive Ordinals</p>
+            <div class="wrap">
+                <a href="#" id="f-link" target="_blank"><img id="f-img"></a>
+                <a href="#" id="p-link" target="_blank"><img id="p-img"></a>
+                <a href="#" id="g-link" target="_blank"><img id="g-img"></a>
+                <a href="#" id="n-link" target="_blank"><img id="n-img"></a>
+            </div>
+            <br>
+        </div>
+        
+    </div>
+    <div class="custom">
+
+		<form id="customization-form"> 
+		
+		
+        <button id="regenerate-btn">Create Random NFP <span class="spinner"></span></button>
+         
+		    <div class="form-group">
+		        <label>Bitcoin Frog #</label>
+		        ID <input type="number" min="1" max="10000" class="number-input" id="f-number" placeholder="1-10000">
+		        Blend: <select class="blend-mode-dropdown" id="f-blend">
+		            <!-- Blend modes options will be added here -->
+		        </select>
+		        Order: <select class="layer-order-dropdown" id="f-order">
+		            <!-- Layer order options will be added here -->
+		        </select>
+		    </div>
+		    <div class="form-group">
+		        <label>Bitcoin Punk #</label>
+		        ID <input type="number" min="0" max="9999" class="number-input" id="p-number"placeholder="0-9999">
+		        Blend: <select class="blend-mode-dropdown" id="p-blend">
+		            <!-- Blend modes options will be added here -->
+		        </select>
+		        Order: <select class="layer-order-dropdown" id="p-order">
+		            <!-- Layer order options will be added here -->
+		        </select>
+		    </div>
+		    <div class="form-group">
+		        <label>Node Monke #</label>
+		        ID <input type="number" min="1" max="10000" class="number-input" id="n-number"placeholder="0-10000">
+		        Blend: <select class="blend-mode-dropdown" id="n-blend">
+		            <!-- Blend modes options will be added here -->
+		        </select>
+		        Order: <select class="layer-order-dropdown" id="n-order">
+		            <!-- Layer order options will be added here -->
+		        </select>
+		    </div>
+		    <div class="form-group">
+		        <label>Goosinal #</label>
+		        ID <input type="number" min="2" max="10000" class="number-input" id="g-number"placeholder="1-10000">
+		        Blend: <select class="blend-mode-dropdown" id="g-blend">
+		            <!-- Blend modes options will be added here -->
+		        </select>
+		        Order: <select class="layer-order-dropdown" id="g-order">
+		            <!-- Layer order options will be added here -->
+		        </select>
+		    </div>
+		</form>
+		
+		<br><hr><br>
+		
+		<h2>How to inscribe?</h2>
+		
+		<h3>Step1:</h3>
+		 <button id="download-btn">Download HTML <span class="spinner"></span></button>
+		 
+		<h3>Step2:</h3>
+		 <a href="https://unisat.io/inscribe" target="_blank" class="button">Inscribe via Unisat</a>
+    </div>
+    <div style="clear:both;"></div>
+</div>
+
+
+
+    <script>
+        // Load JSON data
+        async function loadJson(filename) {
+            const response = await fetch(filename);
+            return await response.json();
+        }
+
+        // Shuffle and reorder elements
+        function shuffleAndReorderElements(parent, elements) {
+            const shuffled = elements.sort(() => Math.random() - 0.5);
+            shuffled.forEach(element => parent.appendChild(element)); // Re-append in new order
+            updateLayerOrderDropdowns(); // Update layer order dropdowns after shuffle
+        }
+
+        // Update layer order dropdowns
+        function updateLayerOrderDropdowns() {
+            const images = document.querySelectorAll('.wrap a');
+            images.forEach((a, index) => {
+                const dropdownId = a.id.split('-')[0] + '-order'; // Construct dropdown ID based on image ID
+                const dropdown = document.getElementById(dropdownId);
+                if (dropdown) {
+                    dropdown.value = index + 1; // Set dropdown value to the new layer order
+                }
+            });
+        }
+
+        // Populate dropdowns on initial load
+        function populateDropdowns() {
+             const blendModes = ["multiply", "darken", "difference", "exclusion"];
+            const blendModeDropdowns = document.querySelectorAll('.blend-mode-dropdown');
+            blendModeDropdowns.forEach(dropdown => {
+            blendModes.forEach(mode => {
+            const option = document.createElement('option');
+            option.value = mode;
+            option.textContent = mode.charAt(0).toUpperCase() + mode.slice(1);
+            dropdown.appendChild(option);
+            });
+        });
+            const layerOrderDropdowns = document.querySelectorAll('.layer-order-dropdown');
+            layerOrderDropdowns.forEach(dropdown => {
+                for (let i = 1; i <= 4; i++) {
+                    const option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = i;
+                    dropdown.appendChild(option);
+                }
+            });
+        }            
+
+        // Refresh images and update UI
+        async function refreshImages() {
+            try {
+                // Load JSON data for images
+                
+                const [f, p, g, n] = await Promise.all([
+                    loadJson('f.json'),
+                    loadJson('p.json'),
+                    loadJson('g.json'),
+                    loadJson('n.json')
+                ]);
+
+                // Get random elements from each collection
+                const [fr, pr, gr, nr] = [f, p, g, n].map(getRandomElement);
+                
+                // Update image sources and links
+                ['f', 'p', 'g', 'n'].forEach((id, idx) => {
+                    if(id == 'f'){ number = fr.meta.name; }
+                    if(id == 'p'){ number = pr.meta.name; }
+                    if(id == 'g'){ number = gr.meta.name; }
+                    if(id == 'n'){ number = nr.meta.name; }
+                    updateImageAndLink(id, [fr, pr, gr, nr][idx],number);
+                });
+
+
+                // Shuffle and reorder images
+                const images = Array.from(document.querySelectorAll('.wrap a'));
+                shuffleAndReorderElements(document.querySelector('.wrap'), images);
+
+                // Randomly assign blend modes and update form fields
+                assignRandomBlendModes(images);
+                populateFormFields(fr, pr, gr, nr);
+                updateCanvasAndPNG();
+                
+            } catch (error) {
+                console.error('Error loading images:', error);
+            }
+        }
+
+        // Assign random blend modes to images and update form fields
+        function assignRandomBlendModes(images) {
+            const blendModes = ["multiply", "darken", "difference", "exclusion"];
+                    images.forEach(img => {
+                    const randomBlendMode = blendModes[Math.floor(Math.random() * blendModes.length)];
+                    img.className = randomBlendMode;
+                    updateBlendModeDropdown(img);
+                });
+            }
+
+    // Update blend mode dropdowns
+    function updateBlendModeDropdown(img) {
+        const blendDropdownId = img.id.split('-')[0] + '-blend';
+        const blendDropdown = document.getElementById(blendDropdownId);
+        if (blendDropdown) {
+            blendDropdown.value = img.className;
+        }
+    }
+
+    // Updated populateFormFields function
+    function populateFormFields(f, p, g, n) {
+        document.getElementById('f-number').value = f.meta.name;
+        document.getElementById('p-number').value = p.meta.name;
+        document.getElementById('n-number').value = n.meta.name;
+        document.getElementById('g-number').value = g.meta.name;
+    }
+
+        // Modified updateImageSource function
+        async function updateImageSource(imageNumber, collection) {
+            const data = await loadJson(collection + '.json');
+            const item = data.find(item => item.meta.name === imageNumber.toString());
+
+            if (item) {
+                updateImageAndLink(collection, item, imageNumber);
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        // Function to display "Invalid NFP" message
+        function displayInvalidMessage() {
+            const wrap = document.querySelector('.result');
+            wrap.style.display = 'none'; // Hide all images
+
+            const errorMessage = document.createElement('h2');
+            errorMessage.textContent = 'Invalid NFP';
+            errorMessage.className = 'error-message';
+            errorMessage.style.color = 'red'; // Optional styling
+            errorMessage.style.textAlign = 'center';
+
+        const headDiv = document.querySelector('.head');
+        // Remove existing error message if any
+        if (document.querySelector('.error-message')) {
+            headDiv.removeChild(document.querySelector('.error-message'));
+        }
+        headDiv.appendChild(errorMessage); // Add the error message to the head div
+    }        
+
+    // New function to check all IDs and update the UI accordingly
+    async function checkAndUpdateAllImages() {
+        const collections = ['f', 'p', 'g', 'n'];
+        let allValid = true;
+
+        for (const collection of collections) {
+            const imageNumber = document.getElementById(`${collection}-number`).value;
+            const isValid = await updateImageSource(imageNumber, collection);
+            if (!isValid) allValid = false;
+        }
+
+        if (!allValid) {
+            displayInvalidMessage();
+        } else {
+            hideInvalidMessage();
+        }
+    }    
+
+    // Function to hide the error message and show images
+    function hideInvalidMessage() {
+        const wrap = document.querySelector('.wrap');
+        //wrap.style.display = 'block'; // Show images
+        const errorMessage = document.querySelector('.error-message');
+        if (errorMessage) {
+            errorMessage.parentNode.removeChild(errorMessage);
+        }
+    }    
+
+    // Function to update blend mode
+    function updateBlendMode(imageId, blendMode) {
+        document.getElementById(imageId + '-link').className = blendMode;
+    }
+
+     // Function to update image order
+    function updateImageOrder(imageId, newOrder) {
+        const image = document.getElementById(imageId + '-link');
+        const parent = image.parentNode;
+        const currentOrder = Array.from(parent.children).indexOf(image);
+    
+        if (newOrder - 1 === currentOrder) {
+            // No change in order, so do nothing
+            return;
+        }
+    
+        if (newOrder === parent.children.length) {
+            // Move to the last position
+            parent.appendChild(image);
+        } else {
+            // Move to the specific position
+            const referenceNode = parent.children[newOrder - 1 > currentOrder ? newOrder : newOrder - 1];
+            parent.insertBefore(image, referenceNode);
+        }
+    
+        updateLayerOrderDropdowns();
+    }
+
+    // Attach event listeners to the number-input fields
+    document.querySelectorAll('.number-input').forEach(input => {
+        input.addEventListener('change', async () => {
+            await checkAndUpdateAllImages();
+            updateCanvasAndPNG();
+        });
+    });
+
+    document.querySelectorAll('.blend-mode-dropdown').forEach(dropdown => {
+        dropdown.addEventListener('change', (e) => {
+            const imageId = e.target.id.split('-')[0];
+            updateBlendMode(imageId, e.target.value);
+            updateCanvasAndPNG();
+        });
+    });
+
+    document.querySelectorAll('.layer-order-dropdown').forEach(dropdown => {
+        dropdown.addEventListener('change', (e) => {
+            const imageId = e.target.id.split('-')[0];
+            const order = parseInt(e.target.value);
+            updateImageOrder(imageId, order);
+            updateCanvasAndPNG();
+        });
+    });    
+
+    // Extract ID number from name
+    function extractIdNumber(name) {
+        const matches = name.match(/#(\d+)/);
+        return matches ? matches[1] : '';
+    }
+
+    // Random element getter
+    function getRandomElement(arr) {
+        return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    // Function to generate the HTML content for download
+    function generateDownloadHTML() {
+        const images = document.querySelectorAll('.wrap img');
+        const htmlContent = `<html><script src="/content/246cfccd6e2929f79b2116b648747107de2310313092fe23098f26496f70592bi0"></scr` + `ipt>${Array.from(images).map((img) => `<img src="${img.src.replace('https://ordinals.com', '')}" class="${document.getElementById(`${img.id.replace('-img', '')}-blend`).value}" id="${img.id.replace('-img', '')}-${document.getElementById(`${img.id.replace('-img', '')}-number`).value}" crossorigin>`).join('')}</html>`;
+        return htmlContent;
+    }
+    
+    // Attach an event listener to the "Download HTML" button
+    document.getElementById('download-btn').addEventListener('click', function() {
+        event.preventDefault();
+        showSpinner('download-btn');
+        const htmlContent = generateDownloadHTML();
+        const blob = new Blob([htmlContent], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        //a.download = 'nfp.html';
+        a.click();
+        URL.revokeObjectURL(url);
+        
+        setTimeout(() => {
+            document.querySelector(".spinner").style.display = 'none';
+        }, 1000);
+    });
+
+    document.getElementById('regenerate-btn').addEventListener('click', function() {
+        event.preventDefault();
+        showSpinner('regenerate-btn');
+        refreshImages();    
+        applyRandomColorsOnce();
+    });    
+
+    // Initial setup
+    document.addEventListener("DOMContentLoaded", async function() {
+        applyRandomColorsOnce();
+        randomizeParagraphColors();
+        populateDropdowns(); // Populate dropdowns on initial load
+        await refreshImages(); // Initial image setup
+        
+    });
+    
+    async function updateCanvasAndPNG() {
+        const canvas = document.getElementById('resultCanvas');
+        if (!canvas) return; // Exit if canvas is not found
+    
+        const ctx = canvas.getContext('2d');
+        
+        // Disable image smoothing for a pixelated effect
+        ctx.imageSmoothingEnabled = false;
+    
+        // Clear the canvas and fill with white background
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+        // Get the images in the order they appear in the .wrap div
+        const images = Array.from(document.querySelectorAll('.wrap a img'));
+    
+        // Draw each image on the canvas in the order they appear
+        for (const img of images) {
+            if (!img.complete) {
+                await new Promise((resolve) => img.onload = resolve); // Wait for image to load
+                document.querySelector(".spinner").style.display = 'none';
+            }
+            const blendMode = img.parentElement.className || 'source-over';
+            ctx.globalCompositeOperation = blendMode;
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        }
+    
+        ctx.globalCompositeOperation = 'source-over'; // Reset to default
+    }
+
+    function applyRandomColorsOnce() {
+        // Define a set of colors
+        const colors = ['#FF5733', '#33FF57', '#3357FF', '#FF33F5', '#FFBF00'];
+
+        document.querySelector('p').style.color = colors[Math.floor(Math.random() * colors.length)];
+        document.querySelectorAll('label').forEach(label => {
+            label.style.color = colors[Math.floor(Math.random() * colors.length)];
+        });
+    }    
+
+    function randomizeParagraphColors() {
+        const pElement = document.querySelector('p');
+        const words = pElement.textContent.split(' ');
+        const coloredWords = words.map(word => `<span>${word}</span>`);
+        pElement.innerHTML = coloredWords.join(' ');
+
+        const spans = pElement.querySelectorAll('span');
+        const colors = ['#FF5733', '#33FF57', '#3357FF', '#FF33F5', '#FFBF00'];
+
+        spans.forEach(span => {
+            setInterval(() => {
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                span.style.color = randomColor;
+            }, Math.floor(Math.random() * 20000) + 500); // Change colors at random intervals between 500ms and 3500ms
+        });
+    }
+    
+    function showSpinner(buttonId) {
+        const button = document.getElementById(buttonId);
+        const spinner = button.querySelector('.spinner');
+        spinner.style.display = 'inline-block'; // Show spinner
+    }
+
+    const updateImageAndLink = (id, imgData, number) => {
+        const imgElement = document.getElementById(`${id}-img`);
+        const linkElement = document.getElementById(`${id}-link`);
+    
+        if (imgElement && linkElement) {
+            imgElement.crossOrigin = 'anonymous';
+            imgElement.src = `https://ordinals.com/content/${imgData.id}`;
+            linkElement.href = imgElement.src.replace('content','inscription');
+            if(id == 'f'){ title = 'Bitcoin Frog #'; }
+            if(id == 'p'){ title = 'Bitcoin Punk #'; }
+            if(id == 'g'){ title = 'Goosinal #'; }
+            if(id == 'n'){ title = 'Node Monke #' }
+            linkElement.title = title+number;
+        }
+    };
+</script>
+
+
+</body>
+</html>
